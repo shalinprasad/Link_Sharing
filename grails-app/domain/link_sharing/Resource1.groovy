@@ -1,16 +1,17 @@
 package link_sharing
 
 class Resource1 {
-    String decription
+    String description
     User1 createdBy
-    Topic topic
+    Topic topics
     Date dateCreated
     Date lastUpdated
 
-    static hasMany = [readingItem:Reading_Item,resourceRated:Resource_Rating]
-    static belongsTo = [topic:Topic,createdBy:User1]
+    static belongsTo = [topics:Topic,createdBy:User1]
+    static hasMany = [readingItem:Reading_Item,resource:Resource_Rating]
+
     static constraints = {
-        description nullable:true,size:1..100
+        //description nullable:true,size:1..100
 
     }
 }
@@ -18,9 +19,17 @@ class Resource1 {
 
 class Link_Resource extends Resource1 {
     String url
+    static constraints={
+
+    }
 }
 
 class Document_Resource extends Resource1 {
 
-    String filePath
-}
+    String  documentpath
+    static constraints={
+        documentpath nullble:true
+    }
+
+    }
+

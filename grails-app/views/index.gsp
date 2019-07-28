@@ -1,4 +1,4 @@
-html>
+<html>
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="4nonymous">
 </head>
@@ -91,7 +91,7 @@ html>
           <div class="panel-body">
             <g:form class="form-horizontal"url="[controller:'Signup',action:'login']">
               <div class="form-group">
-                <text class="control-label col-md-4" for="email"  style="text-align: left;">Email/Username *</text>
+                <text class="control-label col-md-4" for="email"  style="text-align: left;">Email*</text>
                 <div class="col-md-8">
                   <input type="email" class="form-control" id="email" placeholder="Enter email" name="s_email">
                 </div>
@@ -100,6 +100,13 @@ html>
                 <text class="control-label col-md-4 " for="pwd" style="text-align: left;">Password *</text>
                 <div class="col-md-8">
                   <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="s_pwd">
+                <span>
+                    <g:if test="${flash.message}">
+                    <div class="message">
+                      ${flash.message}
+                      </div>
+                      </g:if>
+                    </span>
                 </div>
               </div>
               <div class="form-group">
@@ -116,7 +123,7 @@ html>
         <div class="panel panel-default">
           <div class="panel-heading">Register</div>
           <div class="panel-body">
-            <g:uploadForm class="form-horizontal" url="[controller:'signup',action:'index']" >
+            <g:uploadForm class="form-horizontal" url="[controller:'signup',action:'signup']" >
               <div class="form-group">
                 <text class="control-label col-md-4" for="firstname" style="text-align: left;">First Name *</text>
                 <div class="col-md-8">
@@ -177,15 +184,35 @@ html>
 
               <div class="form-group">
                 <div class=" col-md-8">
+                <div class="container col-md-6">
+                <br>
+                </div>
+                <div class="container col-md-6">
+
+                                                            <span>
+                                                                   <g:if test="${flash.message}">
+                                                                   <div class="message">
+                                                                     ${flash.message}
+                                                                     </div>
+                                                                     </g:if>
+                                                                   </span>
+                                                                   </div>
+
                 </div>
                 <div class=" col-md-4">
-                  <button type="submit" class="btn btn-basic btn-block" width=100%>Register</button>
+                  <button type="submit" class="btn btn-basic btn-block" width=100%>
+                        Register
+                  </button>
                 </div>
               </div>
+
+
              </g:uploadForm>
 
 
           </div>
+
+
         </div>
       </div>
     </div>

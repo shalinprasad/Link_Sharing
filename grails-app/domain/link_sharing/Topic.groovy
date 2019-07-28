@@ -1,16 +1,17 @@
 package link_sharing
 
+import enums.*
+
 class Topic {
 
 
     String name
-    User1 user//createdBy
     Date dateCreated
     Date lastUpdated
-
     Visibility visibilty
+    User1 user
     static belongsTo = [user:User1]
-    static hasMany = [resource:Resource1,subscription:Subscription]
+    static hasMany = [resource:Resource1,subscriptions:Subscription]
 
 
     static constraints = {

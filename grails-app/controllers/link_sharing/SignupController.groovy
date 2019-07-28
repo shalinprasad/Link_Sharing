@@ -4,34 +4,41 @@ class SignupController {
     def signupService
     def loginService
 
-    def index(){
+    def signup() {
         //print "inside cont"
-        def signValue=signupService.register(params,request)
-        if(signValue) {
-        render "SignUp" }
-        else {
-            render "Sign Up Failed"
+        def signValue = signupService.register(params, request)
+        if (signValue) {
+            session.name = signValue.username
+            flash.message="signUp succeed"
+            //redirect(controller: "dashboard", action: "index")
+        } else {
+            flash.message="signUp Failure "
+            redirect(url:'/')
         }
     }
-
 
 
     def login() {
         def loginValue = loginService.loginMethod(params)
-       // println loginValue
+        // println loginValue
         if (loginValue) {
             session.name = loginValue.username
-            redirect(controller:"dashboard",action:"index")
+            flash.message="login succeed"
+            redirect(controller: "dashboard", action: "index")
 
-        }  else {
-            render "Login Failed"
+        } else {
+            flash.message="login failed"
+            redirect(url:'/')
         }
 
 
     }
 
 
-
+    def logout() {
+        session.invalidate()
+        redirect(url:'/')
+    }
 
 
 

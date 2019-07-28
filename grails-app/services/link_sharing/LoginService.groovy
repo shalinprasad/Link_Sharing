@@ -7,32 +7,22 @@ import grails.transaction.Transactional
 class LoginService {
 
 
-    def loginMethod(Map params) {
-        String emailOrUsername = params.s_email
-        String loginPassword = params.s_pwd
 
-        if(emailOrUsername == null || loginPassword == null){
-            return 0
-        }
-        else {
+        def loginMethod(Map params) {
+            String emailOrUsername = params.s_email
+            String loginPassword = params.s_pwd
+            if (emailOrUsername == null || loginPassword == null) {
+                return null
+            } else {
 
-            def fetchUser = User1.findByEmail(emailOrUsername)
+                def fetchUser = User1.findByEmail(emailOrUsername)
+                def fetchPassword = fetchUser.password
 
-            def fetchPassword = fetchUser.password
-
-            def fetchEmail    = fetchUser.email
-
-            if(fetchEmail != email)
-            {
-             return 0;
-            }
-
-            if(loginPassword == fetchPassword){
-                return fetchUser
-            }else{
-                return 0;
+                if (loginPassword == fetchPassword) {
+                    return fetchUser
+                } else {
+                    return null
+                }
             }
         }
     }
-}
-
