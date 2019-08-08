@@ -63,7 +63,7 @@
                                         <span class="caret" onclick="show()"></span></button>
                                     <ul class="dropdown-menu" id="drop">
                                         <li><a href="#">profile</a></li>
-                                        <li><a href="/UserList/userlist">User</a></li>
+                                        <li><a href="/user/findUser">User</a></li>
                                         <li><a href="#">Topics</a></li>
                                         <li><a href="/Signup/logout">Logout</a></li>
                                     </ul>

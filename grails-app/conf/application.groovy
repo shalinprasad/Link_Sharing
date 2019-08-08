@@ -10,6 +10,10 @@ grails {
     }
 }
 
+
+
+
+
 info {
     app {
         name = '@info.app.name@'
@@ -103,7 +107,21 @@ grails {
                 taglib = 'none'
                 staticparts = 'none'
             }
+
+
+
+
         }
+    }
+    mail{
+        host = "smtp.gmail.com"
+        port = 465
+        username = "shalinprasad24@gmail.com"
+        password = "9986445785s"
+        props = ["mail.smtp.auth"                  : "true",
+                 "mail.smtp.socketFactory.port"    : "465",
+                 "mail.smtp.socketFactory.class"   : "javax.net.ssl.SSLSocketFactory",
+                 "mail.smtp.socketFactory.fallback": "false"]
     }
 }
 

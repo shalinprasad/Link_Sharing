@@ -6,15 +6,19 @@ import grails.transaction.Transactional
 
 class LoginService {
 
-
-
         def loginMethod(Map params) {
             String emailOrUsername = params.s_email
             String loginPassword = params.s_pwd
-            if (emailOrUsername == null || loginPassword == null) {
-                return null
-            } else {
+            User1 x=User1.findByEmail(emailOrUsername)
+            if (x==null) {
 
+                return null
+            }
+            if(!x.active){
+                return null
+            }
+
+            else {
                 def fetchUser = User1.findByEmail(emailOrUsername)
                 def fetchPassword = fetchUser.password
 

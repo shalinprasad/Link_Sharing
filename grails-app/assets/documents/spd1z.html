@@ -1,0 +1,38 @@
+<g:each var="sub" in="${subs}" status="i">
+    <div class="panel-body">
+        <g:link controller="topic" action="topicshow" params="[id: sub.id]">  ${sub.topic.name} </g:link>
+        <br>
+        <i>@${userdata.username}</i>
+        <br>
+        <g:link controller="Subscription" action="unsubscribe" params="[id:sub.id, page:"dashboard"]">  Unsubscribe </g:link> &nbsp &nbsp &nbspSubscription: &nbsp ${countofsubs.get(i)} &nbsp &nbsp Posts:${countofposts.get(i)}
+        <br>
+        <g:if test  = "${sub.topic.createdBy.username==session.uname}" >
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="list-inline">
+                        <li>
+                            <g:form controller="subscription" action="updateSerious">
+                                <g:field type="hidden" name="sid" value="${sub.id}"></g:field>
+                                <g:field type="hidden" name="page" value="dashboard"></g:field>
+                                <g:select onChange="submit()" name="seriousness" from="${['CASUAL','SERIOUS','VERY_SERIOUS']}"
+                                          value="${sub.seriousness}" />
+                            </g:form>
+                        </li>
+                        <li>
+                            <g:form controller="topic" action="updatevisibility">
+                                <g:field type="hidden" name="id" value="${sub.topicId}"></g:field>
+                                <g:select onChange="submit()" name="visibility" from="${['PUBLIC','PRIVATE']}" value="${sub.topic.visibility}" />
+                            </g:form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </g:if>
+        <g:else>
+            <g:form controller="subscription" action="updateSerious">
+                <g:field type="hidden" name="sid" value="${sub.id}"></g:field>
+                <g:field type="hidden" name="page" value="dashboard"></g:field>
+                <g:select onChange="submit()" name="seriousness" from="${['CASUAL','SERIOUS','VERY_SERIOUS']}" value="${sub.seriousness}" />
+            </g:form>
+        </g:else>
+    </div>

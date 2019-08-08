@@ -4,8 +4,7 @@ import enums.Seriousness
 
 class Subscription {
 
-    Topic topics
-    User1 user
+
     Seriousness seriousness
     Date dateCreated
 

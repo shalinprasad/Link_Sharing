@@ -3,8 +3,13 @@ package link_sharing
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+
+
+
+
 @Transactional(readOnly = true)
 class UserController {
+
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -114,5 +119,100 @@ class UserController {
 
         def index() { }
     }
+    def userListService
+    def dashBoardService
+    def findUser() {
+        if (!session.name) {
+            flash.message = "Login First"
+            redirect(url: "/")
+        } else {
+            List<User1> listAll = userListService.allUser();
+            render(view: "userList", model: [listAll1: listAll])
 
+        }
+    }
+
+    def topicService
+
+    def myaction() {
+        if (!session.name) {
+            flash.message = "Login First"
+            redirect(url: "/")
+        } else {
+
+//            List<Subscription> subscription = Subscription.createCriteria().list {
+//                eq("topics.id", tid)
+//            }
+//
+//            List<User1> users = subscription*.user
+//            List<Long> userslist = users.collect { it.id }
+//            List subscriptioncount = topicService.subscriptioncount(userslist)
+//            List postscount = topicService.topiccount(userslist)
+
+
+
+            List subscriptionLt = dashBoardService.subscriptions(session.name)
+            User1 user1 = User1.findByUsername(session.name)
+            render(view: "EditProfile", model: [userdata: user1, subscriptions: subscriptionLt])
+        }
+    }
+
+    def changeAdminPermission() {
+        if (!session.name) {
+            flash.message = "Login First"
+            redirect(url: "/")
+        } else {
+            String key = params.variable1
+            println "Valie in controller = " + key
+            userListService.changerPermission(key)
+            redirect(action: "findUser")
+        }
+    }
+
+    def makeAdmin() {
+        if (!session.name) {
+            flash.message = "Login First"
+            redirect(url: "/")
+        } else {
+            String key = params.variable2
+            userListService.adminMethod(key)
+            redirect(action: "findUser")
+        }
+    }
+    def mailService
+    def passreset() {
+        User1 user=User1.findByEmail(params.email)
+        if(!user)
+        {
+            flash.message="User Doesn't Exist"
+            redirect(url:'/')
+        }
+        else {
+            session.username = params.email
+            String link = createLink(controller: 'User', action: 'resetpass', params: [email: user.email], absolute: true)
+            mailService.sendMail {
+                to "${user.email}"
+                subject "Hello .Change password link "
+                text link
+            }
+        }
+    }
+
+    def resetpass(){
+        render(view:'password',model:[email:params.email])
+    }
+    def changepassword() {
+        User1 user = User1.findByEmail(params.email)
+        User1 user1 = User1.findByEmail(session.username)
+        if (session.username != user.email) {
+            session.invalidate()
+            flash.message = "Suspicious activity found"
+            redirect(url: '/')
+        } else {
+            user.password = params.password
+            user.save(flush: true)
+            flash.message = "Password changed "
+            redirect(url: "/")
+        }
+    }
 }
