@@ -11,9 +11,8 @@ class SignupController {
     }
 
     def signup() {
-        Boolean user = User1.findByUsername(params.username)
-        Boolean user1 = User1.findByEmail(params.signup_email)
-        if (user || user1) {
+        Boolean user = User1.findByUsernameOrEmail(params.username, params.signup_email)
+        if (user) {
             flash.message3 = "Username or Email already exist"
             redirect(url: '/')
         } else {
@@ -30,11 +29,9 @@ class SignupController {
     }
 
     def login() {
-
         String emailOrUsername = params.s_email
-
-        User1 x = User1.findByEmail(emailOrUsername)
-        if (x == null) {
+        User1 user = User1.findByEmail(emailOrUsername)
+        if (user == null) {
             flash.message = "Login failed"
         }
         def loginValue = loginService.loginMethod(params)
@@ -48,7 +45,6 @@ class SignupController {
             redirect(url: '/')
         }
     }
-
     def logout() {
         session.invalidate()
         redirect(url: '/')

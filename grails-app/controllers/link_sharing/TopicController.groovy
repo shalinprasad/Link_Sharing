@@ -1,5 +1,5 @@
-
 package link_sharing
+
 import enums.*
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -14,14 +14,11 @@ class TopicController {
             flash.message = "Login First"
             redirect(url: "/")
         } else {
-            Topic t=Topic.findByName(params.topicName)
-            if(!params.topicName)
-            {
+            Topic t = Topic.findByName(params.topicName)
+            if (!params.topicName) {
                 flash.message4 = "Please provide Topic name"
                 redirect(controller: "dashboard", action: "index")
-            }
-            else {
-
+            } else {
                 List<Topic> t1 = topicService.post(session.name)
                 Boolean topicExist = t1.contains(t)
                 if (topicExist) {
@@ -35,6 +32,7 @@ class TopicController {
             }
         }
     }
+
     def updateVisibility() {
         if (!session.name) {
             flash.message = "Login First"
@@ -44,6 +42,7 @@ class TopicController {
             redirect(controller: "dashboard", action: "index")
         }
     }
+
     def topiclist() {
         if (!session.name) {
             flash.message = "Login First"
@@ -53,6 +52,7 @@ class TopicController {
             render(view: 'topiclist', model: [topiclists: topiclist])
         }
     }
+
     def topicshow() {
         if (!session.name) {
             flash.message = "Login First"
@@ -61,8 +61,11 @@ class TopicController {
             User1 user = User1.findByUsername(session.name)
             User1 user1 = User1.findByUsername(session.name)
             Long tid = 0.0
+
+            println params.id.getClass()
             Long id = Long.parseLong(params.id)
             Subscription sub = Subscription.get(id)
+
             List subscriptionLt = dashBoardService.subscriptions(session.name)
             if (sub) {
                 Topic t = sub.topics
@@ -86,8 +89,6 @@ class TopicController {
             List<Resource1> resource = Resource1.createCriteria().list {
                 eq("topics.id", tid)
             }
-
-
             render(view: "topicshow",
                     model: [user             : user, subs: sub,
                             subscount        : subscount,
@@ -113,6 +114,32 @@ class TopicController {
             redirect(action: "topiclist")
         }
     }
+
+    def deleted() {
+        if (!session.name) {
+            flash.message = "Login First"
+            redirect(url: "/")
+        } else {
+            Long t_id = Long.parseLong(params.id)
+            Topic t1 = Topic.findById(t_id)
+            t1.delete(flush: true)
+            redirect(controller: "dashboard", action:"index")
+        }
+    }
+
+
+    def editDocument() {
+        if (!session.name) {
+            flash.message = "Login First"
+            redirect(url: "/")
+        } else {
+            Resource1 res = Resource1.get(Long.parseLong(params.id))
+            topicService.saveDocument(params, request, session.name)
+            redirect(controller: "resource", action: "index", params: [id: res.id])
+        }
+    }
+
+
     def sendInvite() {
         if (!session.name) {
             flash.message = "Login First"
@@ -125,12 +152,14 @@ class TopicController {
             } else {
                 Topic topic = Topic.findByName(params.topicName)
                 Long topicId = topic.id
+
                 String link = createLink(controller: 'Subscription', action: 'subscribeOther', params: [id: topicId, email: user.email], absolute: true)
                 sendMail {
                     to "${user.email}"
                     subject "Hello ${user.firstName} You have been invited to join this topic at LinkSharing!!!"
                     text link
                 }
+                flash.message6 = "Invitation Link has been Send Successfully"
                 redirect controller: 'dashboard', action: 'index'
             }
         }

@@ -4,15 +4,15 @@ import grails.transaction.Transactional
 
 @Transactional
 class UserListService {
-
     def allUser() {
         List allUserList = User1.list()
         return allUserList;
 
     }
-    def changerPermission(String name){
+
+    def changerPermission(String name) {
         User1 u = User1.findByEmail(name)
-        if(u.id != 1) {
+        if (u.id != 1) {
             if (u.active) {
                 u.active = false
             } else {
@@ -22,9 +22,9 @@ class UserListService {
             return u
         }
     }
-    def adminMethod(String name){
+    def adminMethod(String name) {
         User1 u = User1.findByEmail(name)
-        if(u.id != 1) {
+        if (u.id != 1) {
             if (u.admin) {
                 u.admin = false
             } else {

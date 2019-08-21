@@ -141,7 +141,7 @@
             <div class="panel-heading">Recent Searches</div>
             <div class="panel-body">
                 <table  style="width:100%">
-                    <td rowspan="3" width=15% align="center"> <asset:image src="${userdata.photo}"  style="width:60px;height:60px"/></td>
+                    <td rowspan="3" width=15% align="center">   <g:link controller="profile" action="userDetails">  <asset:image src="${userdata.photo}"  style="width:60px;height:60px"/> </g:link></td>
                     <td width=275px class="text"></td>
                     <td width=150px class="text-muted"></td>
                     <td width=150px></td>
@@ -149,6 +149,14 @@
                     <td width=150px>
                         <a href="#"></a>
 
+                        <tr>
+                            <td width=150px>Subscriptions</td>
+                            <td width="150px">Topics</td>
+                        </tr>
+                        <tr>
+                            <td width=150px>${count_subscribe}</td>
+                            <td width=150px>${count_topic }</td>
+                        </tr>
                     </td>
                 </tr>
                     <td colspan="5" ></td>

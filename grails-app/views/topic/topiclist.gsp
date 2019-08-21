@@ -60,7 +60,7 @@
 <body>
 <d<div class="container"><br>
     <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body" style="background: #31b0d5">
             <div class="container">
                 <div class="col-md-8">
                     <h4 style="color: #a60000"><g:link controller="dashboard" action="index"><strong> <u><b>Link Sharing</b></u></strong></g:link></h4>
@@ -78,7 +78,7 @@
             <th>Topicname</th>
             <th>Username</th>
             <th>Visibility</th>
-            <th>Mangae</th>
+            <th>Manage</th>
 
         </tr>
         </thead>

@@ -14,7 +14,6 @@ class DocumentService {
         Long tID = tobj.id
         def f = request.getFile('document')
         String fName = f.getOriginalFilename()
-        String fname = f.getOriginalFilename()
         String fpath = '/home/shalin/Desktop/Link_Sharing/grails-app/assets/documents/' + uname + fName
         File des = new File(fpath)
         f.transferTo(des)
@@ -28,6 +27,7 @@ class DocumentService {
             }
             eq("topics.id", tID)
         }
+        println userids.getClass()
         Boolean isRead = false
         userids.each {
             User1 us = User1.get(it)
@@ -35,10 +35,11 @@ class DocumentService {
             ri.save(failOnError: true, flush: true)
             us.addToReadingItems(ri)
             newRes.addToReadingItem(ri)
-            us.save(flush:true,failOnError:true)
-            newRes.save(flush:true,failOnError:true)
+            us.save(flush: true, failOnError: true)
+            newRes.save(flush: true, failOnError: true)
         }
     }
+
     def saveLink(params, request, email) {
         User1 user1 = User1.findByUsername(email)
         String uname = user1.username
@@ -46,7 +47,7 @@ class DocumentService {
         String tname = params.topics
         def tobj = Topic.findByName(tname)
 //        Integer tID = tobj.id
-         Long tID = tobj.id
+        Long tID = tobj.id
         String link = params.linkres
 
         Link_Resource newRes = new Link_Resource(description: description1, topics: tID, url: link)
@@ -66,8 +67,8 @@ class DocumentService {
             ri.save(failOnError: true, flush: true)
             us.addToReadingItems(ri)
             newRes.addToReadingItem(ri)
-            us.save(flush:true,failOnError:true)
-            newRes.save(flush:true,failOnError:true)
+            us.save(flush: true, failOnError: true)
+            newRes.save(flush: true, failOnError: true)
         }
 
 

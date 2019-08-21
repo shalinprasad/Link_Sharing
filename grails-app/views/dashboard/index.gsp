@@ -7,7 +7,7 @@
 <div class="container"><br>
 
     <div class="row">
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="background: #31b0d5">
             <div class="panel-body">
                 <div class="container">
                     <div class="col-md-5">
@@ -99,9 +99,10 @@
                         <table   style="width:100%">
                             <tr>
                                 <td rowspan="4" colspan="3" width="10%">
-                                    <asset:image src="${userdata.photo}" height= "100px" width:="100px" style="margin-right: 10px;"/>
+                                    <g:link controller="profile" action="userDetails"><asset:image src="${userdata.photo}" height= "100px" width:="100px" style="margin-right: 10px;"/> </g:link>
                                 </td>
-                                <td width=200px class="text" colspan="3">${userdata.firstName} ${userdata.lastName}</td>
+                                <td width=200px class="text" colspan="3">
+                                    <g:link controller="profile"   action="userDetails">${userdata.firstName} ${userdata.lastName} </g:link></td>
                             </tr>
                             <tr>
                                 <td width=150px class="text-muted" colspan="3">@${userdata.username}</td>
@@ -128,38 +129,31 @@
                 <div class="panel-body">
                     <g:each in="${subscriptions}" var="us" status="i">
                         <li>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <asset:image src="${us.topics.user.photo}" style="width:60px;height:60px"/></div>
-                                <g:link controller="topic" action="topicshow" params="[id: us.id]"> ${us.topics.name} </g:link>
-                                <div class="col-sm-8">
-                                    <div style="font-size:23px;">
-                                        <g:link controller="dashboard" action="index" params="[id: us.id]"></g:link></div>
-                                    <div>@${us.topics.user.username}</div>
-                                    <div class="col-sm-6">
-                                        Subscriptions:
-                                        <div>${subscount.getAt(i) }</div></div>
-                                    <div class="col-sm-6">
-                                        Posts:
-                                        <div><a>${resourcecount.get(i)}</a></div></div>
-
-
-%{--                                <g:if test="${us.subscriptions.user.username.contains(session.name)}">--}%
-%{--                                    <g:link controller="Subscription" action="unsubscribe" params="[id:us.id, page :'dashboard']">Unsubscribe</g:link><br>--}%
-%{--                                </g:if>--}%
-%{--                                <g:else>--}%
-%{--                                    <g:link controller="Subscription" action="subscribe" params="[id:us.id, page:'dashboard']">Subscribe</g:link><br>--}%
-%{--                                </g:else>--}%
+                        <div class="row">
+                            <div class="col-md-4">
+                                <asset:image src="${us.topics.user.photo}" style="width:60px;height:60px"/></div>
+                            <g:link controller="topic" action="topicshow" params="[id: us.id]"> ${us.topics.name} </g:link>
+                        <div class="col-sm-8">
+                            <div style="font-size:23px;">
+                                <g:link controller="dashboard" action="index" params="[id: us.id]"></g:link></div>
+                            <div>@${us.topics.user.username}</div>
+                            <div class="col-sm-6">
+                                Subscriptions:
+                                <div>${subscount.getAt(i) }</div></div>
+                            <div class="col-sm-6">
+                                Posts:
+                                <div><a>${resourcecount.get(i)}</a></div></div>
 
 
 
-<g:if test="${us.topics.user.username==session.name}">
 
-</g:if>
-                                <g:else>
-                                    <g:link controller="Subscription" action="unsubscribe" params="[id:us.id, page:'dashboard']">  Unsubscribe </g:link></div></div>
+                            <g:if test="${us.topics.user.username==session.name}">
 
-                                </g:else>
+                            </g:if>
+                            <g:else>
+                                <g:link controller="Subscription" action="unsubscribe" params="[id:us.id, page:'dashboard']">  Unsubscribe </g:link></div></div>
+
+                            </g:else>
 
 
                             <g:if test  = "${us.topics.user.username==session.name}" >
@@ -181,6 +175,7 @@
                                                 </g:form>
                                             </li>
                                         </ul>
+                                        <g:link controller="topic" action="deleted" params="[id:us.topics.id]"><span class="glyphicon glyphicon-trash"></span></g:link>
                                     </div>
                                 </div>
                             </g:if>
@@ -210,9 +205,11 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <asset:image src="${us.user.photo}"  style="width:70px;height:70px"/></div>
+                                    <g:link controller="profile" action="userDetails">       <asset:image src="${us.user.photo}"  style="width:70px;height:70px"/>   </g:link>   </div>
                                 <div class="col-sm-8">
-                                    <div style="font-size:23px;"><b>${us.name}</b></div>
+                                    <div style="font-size:23px;"><b>
+                                        ${us.name}
+                                    </b></div>
                                     <div>@${us.user.username}</div>
                                     <div class="col-sm-6">
                                         Subscriptions:
@@ -221,7 +218,7 @@
                                         Posts:
                                         <div><a>${topic2.get(i)}</a></div></div>
                                 </div>
-%{--                                <g:link controller="Subscription" action="subscribe" params="[id:us.id, page:"dashboard"]">  Subscribe </g:link>--}%
+                            %{--                                <g:link controller="Subscription" action="subscribe" params="[id:us.id, page:"dashboard"]">  Subscribe </g:link>--}%
 
 
                                 <g:if test="${us.subscriptions.user.username.contains(session.name)}">
@@ -249,143 +246,61 @@
         </div>
         <!-- this is for right side pannel -->
 
-    <div class="panel panel-default" style="height:400px;overflow: auto;">
+        <div class="panel panel-default" style="height:400px;overflow: auto;">
             <div class="panel-heading"><div style="float:left">Inbox</div><br>
-            <div style="margin-left:350px"></div>
-        </div>
-        <div class="panel-body">
-            <g:each in="${resource}" var="res" status="i">
-                <ul class="list-inline">
-                    <li>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <asset:image src="${res.createdBy.photo}"  style="width:70px;height:70px"/></div>
-                            <div class="col-sm-9">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <b>${res.createdBy.firstName}&nbsp${res.createdBy.lastName}</b></div>
-                                    <div class="col-sm-5">@${res.createdBy.username}</div>
-                                    <a class=col-sm-3>${res.topics.name}</a></div>
-                                <div class="row">
-                                    ${res.description}
-                                </div>
-                                <br>
+                <div style="margin-left:350px"></div>
+            </div>
+            <div class="panel-body">
+                <g:each in="${resource}" var="res" status="i">
+                    <ul class="list-inline">
+                        <li>
                             <div class="row">
-                            <div class="col-md-3">
-                                <g:if test="${res instanceof link_sharing.Link_Resource}">
-                                    <a >Download</a>
+                                <div class="col-md-3">
+                                    <asset:image src="${res.createdBy.photo}"  style="width:70px;height:70px"/></div>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <b>${res.createdBy.firstName}&nbsp${res.createdBy.lastName}</b></div>
+                                        <div class="col-sm-5">@${res.createdBy.username}</div>
+                                        <a class=col-sm-3>${res.topics.name}</a></div>
+                                    <div class="row">
+                                        ${res.description}
+                                    </div>
+                                    <br>
+                                <div class="row">
+                                <div class="col-md-3">
+                                    <g:if test="${res instanceof link_sharing.Link_Resource}">
+                                        <a >Download</a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="${res.url}">View Full Site</a>
+                                        </div>
+                                    </g:if>
+                                    <g:else>
+                                        <g:link controller="Document" action="download" params="[id:res.id , tid:res.id ]" >Download</g:link>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a >View Full Site</a>
+                                        </div>
+                                    </g:else>
+                                    <div class="col-md-3">
+                                        %{--                     <g:if test="${}">--}%
+                                        <g:link controller="resource" action="editread" params="[id1:res.id]">Mark as read</g:link>
                                     </div>
                                     <div class="col-md-3">
-                                        <a href="${res.url}">View Full Site</a>
+                                        %{--<g:link controller="resource" action="index" params="[id: res.id]">View post</g:link>--}%
+                                        %{--                                    <g:link controller="resource" action="index" params="[id: res.id]">View post</g:link>--}%
                                     </div>
-                                </g:if>
-                                <g:else>
-                                    <g:link controller="Document" action="download" params="[id:res.id , tid:res.id ]" >Download</g:link>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a >View Full Site</a>
-                                    </div>
-                                </g:else>
-                                <div class="col-md-3">
-%{--                     <g:if test="${}">--}%
-                                    <g:link controller="resource" action="editread" params="[id1:res.id]">Mark as read</g:link>
-                                </div>
-                                <div class="col-md-3">
-                                    %{--<g:link controller="resource" action="index" params="[id: res.id]">View post</g:link>--}%
-%{--                                    <g:link controller="resource" action="index" params="[id: res.id]">View post</g:link>--}%
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-                <br>
-            </g:each>
+                        </li>
+                    </ul>
+                    <br>
+                </g:each>
+            </div>
         </div>
     </div>
-</div>
 
-
-
-    %{--       <div class="col-md-7">--}%
-%{--        <div class="panel-heading"><div style="float:left">Inbox</div>--}%
-%{--            <div style="margin-left:350px"></div>--}%
-%{--        <div class="panel-body">--}%
-%{--            <g:each in="${r}" var="res" status="i">--}%
-%{--                <li>--}%
-%{--                    <div class="row">--}%
-%{--                        <div class="col-md-3">--}%
-%{--                            <asset:image src="${res.user.photo}"  style="width:70px;height:70px"/></div>--}%
-%{--                        <div class="col-sm-9">--}%
-%{--                            <div class="row">--}%
-%{--                                <div class="col-sm-4">--}%
-%{--                                    <b>${res.user.firstName}&nbsp${res.user.lastName}</b></div>--}%
-%{--                                <div class="col-sm-5">@${res.user.username}</div>--}%
-%{--                                <a class=col-sm-3>${res.topic.name}</a></div>--}%
-%{--                            <div class="row">--}%
-%{--                                ${res.description}--}%
-%{--                            </div>--}%
-%{--                        <div class="row">--}%
-%{--                        <div class="col-md-3">--}%
-%{--                            <g:if test="${res instanceof link_sharing.Link_Resource}">--}%
-%{--                                <a >Download</a>--}%
-%{--                                </div>--}%
-%{--                                <div class="col-md-3">--}%
-%{--                                    <a href="${res.url}">View Full Site</a>--}%
-%{--                                </div></g:if>--}%
-%{--                            <g:else>--}%
-
-
-%{--                                <g:link controller="Document" action="download" params="[id:res.id , tid:res.id , flag:1]" >Download</g:link>--}%
-%{--                                </div>--}%
-%{--                                <div class="col-md-3">--}%
-%{--                                    <a href="">View Full Site</a>--}%
-%{--                                </div></g:else>--}%
-
-%{--                            <div class="col-md-3">--}%
-%{--                                <g:link controller="resource" action="editread" params="[id:res.id]">Mark as read</g:link>--}%
-%{--                            </div>--}%
-%{--                            <div class="col-md-3">--}%
-%{--                                <g:link controller="resource" action="index" params="[id: res.id]">View post</g:link>--}%
-%{--                                <g:link controller="resource" action="index" params="[id: res.id]">View post</g:link>--}%
-
-%{--                            </div>--}%
-%{--                        </div>--}%
-%{--                    </div>--}%
-%{--                </li>--}%
-%{--            </g:each>--}%
-
-
-
-%{--    </div>--}%
-%{--</div>--}%
-
-
-
-%{--            <div class="modal fade" id="invite" role="dialog">--}%
-%{--                <div class="modal-dialog">--}%
-%{--                    <div class="modal-content">--}%
-%{--                        <div class="modal-header">--}%
-%{--                            <button type="button" class="close" data-dismiss="modal">&times;</button>--}%
-%{--                            <h4 class="modal-title">Send Invite To</h4>--}%
-%{--                        </div>--}%
-%{--                        <div class="modal-body">--}%
-%{--                            <g:form controller="Topics" action="addTopics" class="topicForm">--}%
-%{--                                Email *:--}%
-%{--                                <input class="form-control" type="text" name="topicName"/>--}%
-%{--                                Topics *:--}%
-%{--                                <select class="form-control" name="selection">--}%
-%{--                                    <option>Option-1</option>--}%
-%{--                                    <option>Option-2</option>--}%
-%{--                                </select>--}%
-%{--                                <input type="submit" class="btn btn-success" style="float: right; margin-top: 5px;"/>--}%
-%{--                            </g:form>--}%
-%{--                        </div>--}%
-%{--                        <div class="modal-footer" style=" margin-top: 15px;">--}%
-%{--                            <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>--}%
-%{--                        </div>--}%
-%{--                    </div>--}%
-%{--                </div>--}%
-%{--            </div>--}%
 
 
 
@@ -444,86 +359,84 @@
 
     %{--lastbutton right --}%
 
-            <div class="modal fade"  id="linkresource" role="dialog">
-                <div class="modal-dialog">
-                    <!-- topic Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Share Link</h4>
-                        </div>
-                        <div class="modal-body">
-                            <g:uploadForm  controller="Document" action="saveLink" class="topicForm">
-                                Link *:
-                                <input type="url" class="form-control"  required id="linkres" placeholder="Link" name="linkres">
-                                <br>
-                                Description *:
-                                <textarea class="form-control"  required id="selectlink" name="selectlink"></textarea>
-                                <br>
-                                <g:select class="btn dropdown-toggle col-sm-8 form-control" name="topics" from="${subscriptions.topics.name}"  optionValue="value" />
-                                <br>
-                                <br>
-                                <input type="submit" value="share"   class="btn btn-success" style="float: right; margin-top: 5px;"/>
-                            </g:uploadForm>
-                        </div>
-                        <div class="modal-footer" style=" margin-top: 15px;">
-%{--                            <button type="button" class="btn btn-warning" onclick="resetTopicForm()">Reset</button>--}%
-%{--                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}%
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    %{--Shared Document--}%
-
-    <div class="modal fade"  id="resource" role="dialog">
+    <div class="modal fade"  id="linkresource" role="dialog">
         <div class="modal-dialog">
             <!-- topic Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Share Document</h4>
+                    <h4 class="modal-title">Share Link</h4>
                 </div>
                 <div class="modal-body">
-                    <g:uploadForm  class="form-horizontal" controller="Document" action="save" name="documentcreate" enctype="multipart/form-data">>
-                                Document *:
-                        <input type="file" class="form-control" required id="doc" placeholder="choose" name="document">
+                    <g:uploadForm  controller="Document" action="saveLink" class="topicForm">
+                        Link *:
+                        <input type="url" class="form-control"  required id="linkres" placeholder="Link" name="linkres">
                         <br>
                         Description *:
-                        <textarea class="form-control" required id="select" name="select"></textarea>
+                        <textarea class="form-control"  required id="selectlink" name="selectlink"></textarea>
                         <br>
                         <g:select class="btn dropdown-toggle col-sm-8 form-control" name="topics" from="${subscriptions.topics.name}"  optionValue="value" />
                         <br>
                         <br>
                         <input type="submit" value="share"   class="btn btn-success" style="float: right; margin-top: 5px;"/>
-
                     </g:uploadForm>
                 </div>
                 <div class="modal-footer" style=" margin-top: 15px;">
-%{--                    <button type="button" class="btn btn-warning" onclick="resetTopicForm()">Reset</button>--}%
-%{--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}%
+
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%{--Shared Document--}%
+
+<div class="modal fade"  id="resource" role="dialog">
+    <div class="modal-dialog">
+        <!-- topic Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Document</h4>
+            </div>
+            <div class="modal-body">
+                <g:uploadForm  class="form-horizontal" controller="Document"   action="save" name="documentcreate" enctype="multipart/form-data">>
+                                Document *:
+                    <input type="file" class="form-control" required id="doc" placeholder="choose" name="document">
+                    <br>
+                    Description *:
+                    <textarea class="form-control" required id="select" name="select"></textarea>
+                    <br>
+                    <g:select class="btn dropdown-toggle col-sm-8 form-control" name="topics" from="${subscriptions.topics.name}"  optionValue="value" />
+                    <br>
+                    <br>
+                    <input type="submit" value="share"   class="btn btn-success" style="float: right; margin-top: 5px;"/>
+
+                </g:uploadForm>
+            </div>
+            <div class="modal-footer" style=" margin-top: 15px;">
+
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 
@@ -563,19 +476,18 @@
             <div class="modal-body">
                 <g:form  controller="topic" action="create" class="topicForm">
                     Name *:
-                    <input class="form-control" maxlength="10" required type="text" name="topicName" id="topicName"/>
+                    <input class="form-control" maxlength="10" pattern="[A-Za-z0-9]+" required type="text" name="topicName" id="topicName"/>
                     Visibility *:
                     <select class="form-control" id="select" name="selection">
 
                         <option>PUBLIC</option>
                         <option>PRIVATE</option>
                     </select>
-                   <input type="submit" class="btn btn-success" style="float: right; margin-top: 5px;"/>  <p>${flash.message4}</p>
+                    <input type="submit" class="btn btn-success" style="float: right; margin-top: 5px;"/>  <p>${flash.message4}</p>
                 </g:form>
             </div>
             <div class="modal-footer" style=" margin-top: 15px;">
-%{--                <button type="button" class="btn btn-warning" onclick="resetTopicForm()">Reset</button>--}%
-%{--                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}%
+
             </div>
         </div>
     </div>
@@ -594,15 +506,7 @@
     function displayinvite(){
         document.getElementById("drop").style.display="block";
     }
-    // var showHideTopicModal = function() {
-    //     var currentDisplay = document.getElementById("topicModal").style.display;
-    //     if(currentDisplay === "none"){
-    //         document.getElementById("topicModal").style.display = "block";
-    //     }
-    //     else {
-    //         document.getElementById("topicModal").style.display = "none";
-    //     }
-    // }
+
     var resetTopicForm = function () {
         $(".topicsForm").trigger("reset");
     }

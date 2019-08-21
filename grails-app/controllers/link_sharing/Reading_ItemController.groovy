@@ -10,7 +10,7 @@ class Reading_ItemController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Reading_Item.list(params), model:[reading_ItemCount: Reading_Item.count()]
+        respond Reading_Item.list(params), model: [reading_ItemCount: Reading_Item.count()]
     }
 
     def show(Reading_Item reading_Item) {
@@ -31,11 +31,11 @@ class Reading_ItemController {
 
         if (reading_Item.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond reading_Item.errors, view:'create'
+            respond reading_Item.errors, view: 'create'
             return
         }
 
-        reading_Item.save flush:true
+        reading_Item.save flush: true
 
         request.withFormat {
             form multipartForm {
@@ -60,18 +60,18 @@ class Reading_ItemController {
 
         if (reading_Item.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond reading_Item.errors, view:'edit'
+            respond reading_Item.errors, view: 'edit'
             return
         }
 
-        reading_Item.save flush:true
+        reading_Item.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'reading_Item.label', default: 'Reading_Item'), reading_Item.id])
                 redirect reading_Item
             }
-            '*'{ respond reading_Item, [status: OK] }
+            '*' { respond reading_Item, [status: OK] }
         }
     }
 
@@ -84,14 +84,14 @@ class Reading_ItemController {
             return
         }
 
-        reading_Item.delete flush:true
+        reading_Item.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'reading_Item.label', default: 'Reading_Item'), reading_Item.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -101,7 +101,7 @@ class Reading_ItemController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'reading_Item.label', default: 'Reading_Item'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

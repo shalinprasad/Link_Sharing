@@ -7,98 +7,100 @@ import enums.Seriousness
 @Transactional
 class ReadingService {
 
-    def displayunread(String username)
-    {
+    def displayunread(String username) {
         Long id = User1.findByUsername(username).id
-        List<Long> Verys = Subscription.createCriteria().list {
+        List<Long> veryserious = Subscription.createCriteria().list {
             projections {
                 property("topics")
+
             }
             eq("user.id", id)
             eq("seriousness", Seriousness.VERY_SERIOUS)
-        }.collect{it.id}
+        }.collect { it.id }
 
-        List<Long> Ser = Subscription.createCriteria().list {
+        List<Long> serious = Subscription.createCriteria().list {
             projections {
                 property("topics")
             }
             eq("user.id", id)
             eq("seriousness", Seriousness.SERIOUS)
-        }.collect{it.id}
+        }.collect { it.id }
 
-        List<Long> Cas = Subscription.createCriteria().list {
+        List<Long> casual = Subscription.createCriteria().list {
             projections {
                 property("topics")
             }
             eq("user.id", id)
             eq("seriousness", Seriousness.CASUAL)
-        }.collect{it.id}
+        }.collect { it.id }
         List<Resource1> Verysr
         List<Resource1> Serr
         List<Resource1> Casr
-        if(Verys){
-            Verysr=Reading_Item.createCriteria().list{
-                projections{
-                    property("resource")
-                }
-                'resource' {
-                    inList("topics.id" , Verys)
-                }
-                eq("user.id", id)
-                eq("isRead",false)
-            }}
-        if(Ser){
-            Serr= Reading_Item.createCriteria().list{
-                projections{
-                    property("resource")
-                }
-                eq("user.id", id)
-                'resource' {
-                    inList("topics.id" , Ser)
-                }
-
-                eq("isRead",false)
-            }}
-        if(Cas){
-            Casr= Reading_Item.createCriteria().list{
+        if (veryserious) {
+            Verysr = Reading_Item.createCriteria().list {
                 projections {
                     property("resource")
                 }
                 'resource' {
-                    inList("topics.id", Cas)
+                    inList("topics.id", veryserious)
                 }
                 eq("user.id", id)
                 eq("isRead", false)
-            }}
+            }
+        }
+        if (serious) {
+            Serr = Reading_Item.createCriteria().list {
+                projections {
+                    property("resource")
+                }
+                eq("user.id", id)
+                'resource' {
+                    inList("topics.id", serious)
+                }
+
+                eq("isRead", false)
+            }
+        }
+        if (casual) {
+            Casr = Reading_Item.createCriteria().list {
+                projections {
+                    property("resource")
+                }
+                'resource' {
+                    inList("topics.id", casual)
+                }
+                eq("user.id", id)
+                eq("isRead", false)
+            }
+        }
 
 
         ArrayList<Resource1> resources = new ArrayList()
-        Verysr.each{
+        Verysr.each {
             resources.add(it)
         }
-        Serr.each{
+        Serr.each {
             resources.add(it)
         }
-        Casr.each{
+        Casr.each {
             resources.add(it)
         }
         return resources
     }
 
-    def editreadMethod(params,String username)
-    {
-        User1 user=User1.findByUsername(username)
-        Long id=Long.parseLong(params.id)
-        Reading_Item ri=Reading_Item.createCriteria().get{
-            eq('resource.id',id)
-            eq('user.id',user.id)
+    def editreadMethod(params, String username) {
+        User1 user = User1.findByUsername(username)
+        Long id = Long.parseLong(params.id)
+        Reading_Item ri = Reading_Item.createCriteria().get {
+            eq('resource.id', id)
+            eq('user.id', user.id)
         }
-        ri.isRead=true
+        ri.isRead = true
         ri.save()
     }
-    def deleteMethod(params)
-    {
-        Resource1 res= Resource1.get(Long.parseLong(params.id))
+
+    def deleteMethod(params) {
+        Resource1 res = Resource1.get(Long.parseLong(params.id))
         res.delete()
     }
 }

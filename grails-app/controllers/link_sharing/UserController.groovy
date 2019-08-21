@@ -4,9 +4,6 @@ import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 
-
-
-
 @Transactional(readOnly = true)
 class UserController {
 
@@ -15,7 +12,7 @@ class UserController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond User1.list(params), model:[userCount: User1.count()]
+        respond User1.list(params), model: [userCount: User1.count()]
     }
 
     def show(User1 user) {
@@ -41,11 +38,11 @@ class UserController {
 
         if (user.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond user.errors, view:'create'
+            respond user.errors, view: 'create'
             return
         }
 
-        user.save flush:true
+        user.save flush: true
 
         request.withFormat {
             form multipartForm {
@@ -70,18 +67,18 @@ class UserController {
 
         if (user.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond user.errors, view:'edit'
+            respond user.errors, view: 'edit'
             return
         }
 
-        user.save flush:true
+        user.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User1'), user.id])
                 redirect user
             }
-            '*'{ respond user, [status: OK] }
+            '*' { respond user, [status: OK] }
         }
     }
 
@@ -94,14 +91,14 @@ class UserController {
             return
         }
 
-        user.delete flush:true
+        user.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User1'), user.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -111,16 +108,17 @@ class UserController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User1'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 
     static class SignupController {
 
-        def index() { }
+        def index() {}
     }
     def userListService
     def dashBoardService
+
     def findUser() {
         if (!session.name) {
             flash.message = "Login First"
@@ -132,28 +130,17 @@ class UserController {
         }
     }
 
-    def topicService
-
     def myaction() {
         if (!session.name) {
             flash.message = "Login First"
             redirect(url: "/")
         } else {
 
-//            List<Subscription> subscription = Subscription.createCriteria().list {
-//                eq("topics.id", tid)
-//            }
-//
-//            List<User1> users = subscription*.user
-//            List<Long> userslist = users.collect { it.id }
-//            List subscriptioncount = topicService.subscriptioncount(userslist)
-//            List postscount = topicService.topiccount(userslist)
-
-
-
+            Integer count_topic = dashBoardService.tCount(session.name)
+            Integer count_subscribe = dashBoardService.sCount(session.name)
             List subscriptionLt = dashBoardService.subscriptions(session.name)
             User1 user1 = User1.findByUsername(session.name)
-            render(view: "EditProfile", model: [userdata: user1, subscriptions: subscriptionLt])
+            render(view: "EditProfile", model: [userdata: user1, subscriptions: subscriptionLt, count_topic: count_topic, count_subscribe: count_subscribe])
         }
     }
 
@@ -181,13 +168,11 @@ class UserController {
     }
     def mailService
     def passreset() {
-        User1 user=User1.findByEmail(params.email)
-        if(!user)
-        {
-            flash.message="User Doesn't Exist"
-            redirect(url:'/')
-        }
-        else {
+        User1 user = User1.findByEmail(params.email)
+        if (!user) {
+            flash.message = "User Doesn't Exist"
+            redirect(url: '/')
+        } else {
             session.username = params.email
             String link = createLink(controller: 'User', action: 'resetpass', params: [email: user.email], absolute: true)
             mailService.sendMail {
@@ -198,21 +183,26 @@ class UserController {
         }
     }
 
-    def resetpass(){
-        render(view:'password',model:[email:params.email])
+    def resetpass() {
+        render(view: 'password', model: [email: params.email])
     }
+
     def changepassword() {
         User1 user = User1.findByEmail(params.email)
         User1 user1 = User1.findByEmail(session.username)
-        if (session.username != user.email) {
-            session.invalidate()
-            flash.message = "Suspicious activity found"
-            redirect(url: '/')
-        } else {
-            user.password = params.password
-            user.save(flush: true)
-            flash.message = "Password changed "
-            redirect(url: "/")
+        if(user) {
+            if (session.username != user.email) {
+                session.invalidate()
+                flash.message = "Suspicious activity found"
+                redirect(url: '/')
+            } else {
+                user.password = params.password
+                user.save(flush: true)
+                flash.message = "Password changed "
+                redirect(url: "/")
+            }
         }
+        else{ flash.message = "Please Sign Up"
+            redirect(url: '/')}
     }
 }

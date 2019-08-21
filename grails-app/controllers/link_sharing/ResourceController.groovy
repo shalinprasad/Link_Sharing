@@ -125,36 +125,30 @@ class ResourceController {
         }
     }
 
-
     def editread(params) {
         if (!session.name) {
             render("Login required")
-        } else{
-            resourceService.editreadMethod(params.id1,session.name)
+        } else {
+            resourceService.editreadMethod(params.id1, session.name)
             redirect(controller: "dashboard", action: "index")
         }
     }
 
-
-    def delete()
-    {
+    def delete() {
         User1 user = User1.findByUsername(session.name)
-        if(!user)
-        {
+        if (!user) {
             flash.message4 = "Please login first!"
-            redirect url:'/'
+            redirect url: '/'
         }
         Resource1 resource = Resource1.get(params.id)
-        if(resource.hasProperty("documentPath"))
-        {
-            String location = '/home/shalin/Desktop/Link_Sharing/grails-app/assets/documents/'+resource.documentpath
+        if (resource.hasProperty("documentPath")) {
+            String location = '/home/shalin/Desktop/Link_Sharing/grails-app/assets/documents/' + resource.documentpath
             File file = new File(location)
             file.delete()
         }
-        resource.delete(flush:true,failOnError:true)
-        redirect controller:'dashboard',action:'index'
+        resource.delete(flush: true, failOnError: true)
+        redirect controller: 'dashboard', action: 'index'
     }
-
 
     def postlist() {
         if (!session.name) {

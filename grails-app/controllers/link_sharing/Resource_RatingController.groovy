@@ -108,11 +108,13 @@ class Resource_RatingController {
 //
 //    }
     def Resource_RatingService
+
     def save() {
         if (!session.name) {
             flash.message = "Login First"
             redirect(url: "/")
         } else {
+            println"checking rating"+params
             Resource_RatingService.saveMethod(params)
             render([success: true] as JSON)
         }

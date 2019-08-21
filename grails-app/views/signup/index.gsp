@@ -14,11 +14,11 @@
 
 
 <div class="container"><br>
-  <div class="panel panel-default col-md-12">
+  <div class="panel panel-default col-md-12" style="background: #31b0d5">
     <div class="panel-body">
       <div class="container">
         <div class="col-md-8">
-          <h4 style="color: #a60000"><g:link controller="#" action="#"><strong> <u><b>Link Sharing</b></u></strong></g:link></h4>
+          <h4 style="color: #8B0000"><g:link><strong> <u><b>Link Sharing</b></u></strong></g:link></h4>
         </div>
 
       </button>
@@ -231,7 +231,7 @@
               <div class="form-group">
                 <text class="control-label col-md-4 " for="photo" style="text-align: left;">Photo</text>
                 <div class="col-md-8">
-                  <input type="file" class="form-control" id="photo" placeholder="choose" name="inputphoto">
+                  <input type="file" class="form-control"  id="photo" placeholder="choose" name="inputphoto">
                 </div>
               </div>
 
@@ -284,9 +284,11 @@
           success: function(){
           document.getElementById("message").innerHTML="Change password Link has been send your gmail account"
           }
+
           });
           }
           </script>
+          
 
         </div>
       </div>

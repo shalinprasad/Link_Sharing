@@ -48,7 +48,6 @@ class DashboardController {
                     it.id
 
                 }
-
                 List subs2 = dashBoardService.subscriptioncount(aa)
                 List topic2 = dashBoardService.postscount(aa)
                 List<Resource1> resource = readingService.displayunread(session.name)

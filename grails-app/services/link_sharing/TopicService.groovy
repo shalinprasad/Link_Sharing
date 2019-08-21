@@ -8,10 +8,6 @@ import javax.mail.Session
 @Transactional
 class TopicService {
     def createTopic(params, email) {
-        String tname = params.topicName
-        println "params=" + params
-        Visibility vi = Visibility.PRIVATE
-        println "uemail = " + email
         User1 u = User1.findByUsername(email)
         Topic t = new Topic(name: params.topicName, visibilty: params.selection)
         u.addToTopics(t)
@@ -34,70 +30,100 @@ class TopicService {
         print t.validate()
     }
 
-    def showListMethod()
-    {
+    def showListMethod() {
         List<Topic> topicList = Topic.list()
         return topicList
     }
 
-    def subscriptioncount(List userslist)
-    {
-        def usercounts=Subscription.createCriteria().list()
+    def subscriptioncount(List userslist) {
+        def usercounts = Subscription.createCriteria().list()
                 {
-                    projections{
+                    projections {
                         count('user.id')
                         groupProperty('user.id')
 
                     }
-                    'user'{
-                        inList('id',userslist)
+                    'user' {
+                        inList('id', userslist)
                     }
                 }
-        List <Integer> counts=userslist.collect{ x ->
-            usercounts.find{
-                if (it.getAt(1)==x)
+        List<Integer> counts = userslist.collect { x ->
+            usercounts.find {
+                if (it.getAt(1) == x)
                     return it.getAt(0)
             }
-        }.collect{it.getAt(0)}
+        }.collect { it.getAt(0) }
         return counts
     }
-    def topiccount(List userslist)
-    {
-        def topcounts=Topic.createCriteria().list()
+
+    def topiccount(List userslist) {
+        def topcounts = Topic.createCriteria().list()
                 {
-                    projections{
+                    projections {
                         count('user.id')
                         groupProperty('user.id')
                     }
-                    'user'{
-                        inList('id',userslist)
+                    'user' {
+                        inList('id', userslist)
                     }
                 }
-        List <Integer> topiccount=userslist.collect{ x ->
-            topcounts.find{
-                if (it.getAt(1)==x)
+        List<Integer> topiccount = userslist.collect { x ->
+            topcounts.find {
+                if (it.getAt(1) == x)
                     return it.getAt(0)
             }
-        }.collect{if(!it)
-            return 0
-        else
-            it.getAt(0)}
+        }.collect {
+            if (!it)
+                return 0
+            else
+                it.getAt(0)
+        }
         return topiccount
     }
+
     def post(String name) {
         User1 user = User1.findByUsername(name)
-        List<Topic> t2 = Topic.createCriteria().list{
-            projections{
+        List<Topic> t2 = Topic.createCriteria().list {
+            projections {
                 eq('user', user)
             }
         }
         return t2
     }
-    def visibility(params){
+
+    def visibility(params) {
         Topic t = Topic.get(params.id)
-        println "params.visibility"+ params.visibility
         t.visibilty = params.visibility
-        t.save(flush:true)
+        t.save(flush: true,failOnError: true)
     }
+
+    def saveDocument(params, request, email) {
+        String fName
+        User1 user1 = User1.findByUsername(email)
+        Long uid = user1.id
+        String uname = user1.username
+        Resource1 res = Resource1.get(Long.parseLong(params.id))
+        def f = request.getFile('document')
+        if (f) {
+            fName = f.getOriginalFilename()
+        }
+        String link = params.link
+        if (link) {
+            res.url = link
+            res.save(flush: true, failOnError: true)
+        }
+
+        if (fName) {
+            String str = uname + fName
+            String fpath = '/home/shalin/Desktop/Link_Sharing/grails-app/assets/documents' + str
+            File des = new File(fpath)
+            f.transferTo(des)
+            res.path = str
+            res.save(flush: true, failOnError: true)
+        }
+        res.description = params.desc
+        res.save(flush: true, failOnError: true)
+    }
+
 
 }

@@ -3,7 +3,8 @@ package link_sharing
 import enums.Seriousness
 
 class SubscriptionController {
-  def subscriptionService
+    def subscriptionService
+
     def updateSerious() {
         if (!session.name) {
             flash.message = "Login First"
@@ -13,6 +14,7 @@ class SubscriptionController {
             redirect(controller: "dashboard", action: "index")
         }
     }
+
     def unsubscribe(params) {
         if (!session.name) {
             flash.message = "Login First"
@@ -26,7 +28,7 @@ class SubscriptionController {
                 sid = Long.parseLong(params.id)
             } else {
                 Long topid = Long.parseLong(params.id)
-                Subscription sub = Subscription.createCriteria().get {
+                Subscription sub = Subscription.createCriteria(). get {
                     eq('topics.id', topid)
                     eq('user.id', user.id)
                 }
@@ -43,10 +45,7 @@ class SubscriptionController {
     }
 
 
-
-
     def subscribe(params) {
-
         if (!session.name) {
             flash.message = "Login First"
             redirect(url: "/")
@@ -61,7 +60,8 @@ class SubscriptionController {
             redirect(controller: "dashboard", action: "index")
         }
     }
-    def deleteTopics(){
+
+    def deleteTopics() {
         if (!session.name) {
             flash.message = "Login First"
             redirect(url: "/")
@@ -70,8 +70,6 @@ class SubscriptionController {
             redirect(controller: "dashboard", action: "index")
         }
     }
-
-
 
 
     def subscribeOther(params) {
@@ -83,18 +81,18 @@ class SubscriptionController {
             User1 user = User1.findByEmail(params.email)
             Topic topic = Topic.get(topid)
             Subscription sub = Subscription.findByTopicsAndUser(topic, user)
-            if(session.name != user.username){
-                flash.message="Login first"
+            if (session.name != user.username) {
+                flash.message = "Login first"
                 session.invalidate()
                 redirect(url: '/')
-                }
-            else if (sub == null) {
+            } else if (sub == null) {
                 Subscription sub1 = new Subscription(seriousness: "CASUAL")
                 topic.addToSubscriptions(sub1)
                 user.addToSubscriptions(sub1)
                 topic.save(flush: true)
                 user.save(flush: true, failOnError: true)
                 sub1.save(flush: true, failOnError: true)
+                redirect(controller: "dashboard", action: "index")
             } else {
                 flash.message6 = "Already subscribed"
             }

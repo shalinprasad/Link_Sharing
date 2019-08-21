@@ -6,9 +6,9 @@ import link_sharing.User1
 
 @Transactional
 
-class SignupService{
+class SignupService {
 
-    def register(params,request) {
+    def register(params, request) {
         String password = params.password
         String confirmpassword = params.confirmpassword
         if (confirmpassword.compareTo(password) != 0) {
@@ -28,35 +28,34 @@ class SignupService{
             s.transferTo(dest)
             User1 user2 = new User1(firstName: firstname, lastName: lastname, email: email, username: username, password: password, admin: admin, active: active, photo: image)
             user2.save(flush: true, failOnError: true, validate: true)
-
-
         }
     }
 
-        List<Resource1> recentShare() {
-            List<Resource1> recentShare = Resource1.createCriteria().list(max: 5) {
+    List<Resource1> recentShare() {
+        List<Resource1> recentShare = Resource1.createCriteria().list(max: 5) {
+            'topics' {
+                eq('visibilty', Visibility.PUBLIC)
+            }
+        }
+        recentShare.sort { Resource1 r2, Resource1 r1 -> r1.dateCreated <=> r2.dateCreated }
+    }
+
+    List<Resource1> postList() {
+        List<Resource1> topPosts = Resource_Rating.createCriteria().list(max: 5) {
+            projections {
+                avg("score")
+                groupProperty("resource.id")
+            }
+            'resource' {
                 'topics' {
                     eq('visibilty', Visibility.PUBLIC)
                 }
             }
-            recentShare.sort { Resource1 r2, Resource1 r1 -> r1.dateCreated <=> r2.dateCreated }
         }
-        List<Resource1> postList() {
-            List<Resource1> topPosts = Resource_Rating.createCriteria().list(max: 5) {
-                projections {
-                    avg("score")
-                    groupProperty("resource.id")
-                }
-                'resource' {
-                    'topics' {
-                        eq('visibilty', Visibility.PUBLIC)
-                    }
-                }
-            }
-            List<Long> resIds = topPosts.collect { it.getAt(1) }
-            return resIds
-        }
-
+        List<Long> resIds = topPosts.collect { it.getAt(1) }
+        return resIds
     }
+
+}
 
 

@@ -9,18 +9,15 @@ class DocumentController {
             flash.message = "Login First"
             redirect(url: "/")
         } else {
-            if(!params.select)
-            {
-                flash.message4="Please provide the description"
-                redirect(controller: "dashboard",action: "index")
-            }
-           else {
+            if (!params.select) {
+                flash.message4 = "Please provide the description"
+                redirect(controller: "dashboard", action: "index")
+            } else {
                 documentService.saveDoc(params, request, session.name)
                 redirect(controller: "Dashboard", action: "index")
             }
         }
     }
-
 
     def saveLink() {
         if (!session.name) {
@@ -37,8 +34,7 @@ class DocumentController {
         }
     }
 
-    def download()
-    {
+    def download() {
         if (!session.name) {
             flash.message = "Login First"
             redirect(url: "/")
@@ -63,8 +59,6 @@ class DocumentController {
         }
 
     }
-
-
 
 
 }

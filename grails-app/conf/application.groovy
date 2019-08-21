@@ -86,10 +86,15 @@ grails {
     urlmapping {
         cache {
             maxsize = 1000
+
         }
     }
     controllers {
         defaultScope = 'singleton'
+        upload {
+            maxFileSize=104857600
+            maxRequestSize=104857600
+        }
     }
     converters {
         encoding = 'UTF-8'

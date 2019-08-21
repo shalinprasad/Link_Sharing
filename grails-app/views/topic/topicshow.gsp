@@ -184,7 +184,7 @@
                 <div class="modal-body">
                     <g:form  controller="topic" action="create" class="topicForm">
                         Name *:
-                        <input class="form-control" type="text" name="topicName" maxlength="10" required id="topicName"/>
+                        <input class="form-control" type="text" name="topicName" pattern="[A-Za-z]+" maxlength="10" required id="topicName"/>
                         Visibility *:
                         <select class="form-control" id="select" name="selection">
                             <option>PUBLIC</option>
@@ -312,7 +312,7 @@
 
                     <div class="input-group-btn">
                         <button class="btn btn-basic" type="submit">
-                            <span class="glyphicon glyphicon-search"></span>
+                            <span class=""></span>
                         </button>
                     </div>
                 </div>
